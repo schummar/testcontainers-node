@@ -5,4 +5,5 @@ export interface ImageClient {
   build(context: string, opts: ImageBuildOptions): Promise<void>;
   pull(imageName: ImageName, opts?: { force: boolean }): Promise<void>;
   exists(imageName: ImageName): Promise<boolean>;
+  load(file: string | NodeJS.ReadableStream): Promise<void>;
 }

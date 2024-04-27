@@ -111,4 +111,24 @@ export class DockerImageClient implements ImageClient {
       throw err;
     }
   }
+
+  async load(file: string | NodeJS.ReadableStream): Promise<void> {
+    try {
+      log.debug(`Loading image...`);
+
+      const stream = await this.dockerode.loadImage(file);
+      await new Promise<void>((resolve) => {
+        byline(stream).on("data", (line) => {
+          if (pullLog.enabled()) {
+            pullLog.trace(line);
+          }
+        });
+        stream.on("end", resolve);
+      });
+      log.debug(`Loaded image`);
+    } catch (err) {
+      log.error(`Failed to load image: ${err}`);
+      throw err;
+    }
+  }
 }
