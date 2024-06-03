@@ -26,7 +26,8 @@ export class ContainerRuntimeClient {
     public readonly compose: ComposeClient,
     public readonly container: ContainerClient,
     public readonly image: ImageClient,
-    public readonly network: NetworkClient
+    public readonly network: NetworkClient,
+    public readonly dockerode: Dockerode
   ) {}
 }
 
@@ -112,5 +113,5 @@ async function initStrategy(strategy: ContainerRuntimeClientStrategy): Promise<C
 
   const info: Info = { node: nodeInfo, containerRuntime: containerRuntimeInfo, compose: composeInfo };
 
-  return new ContainerRuntimeClient(info, composeClient, containerClient, imageClient, networkClient);
+  return new ContainerRuntimeClient(info, composeClient, containerClient, imageClient, networkClient, dockerode);
 }
