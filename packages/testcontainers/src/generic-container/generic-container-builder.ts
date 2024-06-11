@@ -17,6 +17,7 @@ export class GenericContainerBuilder {
   private pullPolicy: ImagePullPolicy = PullPolicy.defaultPolicy();
   private cache = true;
   private target?: string;
+  private useBuildKit = false;
 
   constructor(
     private readonly context: string,
@@ -41,6 +42,11 @@ export class GenericContainerBuilder {
 
   public withTarget(target: string): this {
     this.target = target;
+    return this;
+  }
+
+  public withBuildKit(useBuildKit = true): this {
+    this.useBuildKit = useBuildKit;
     return this;
   }
 
@@ -71,7 +77,8 @@ export class GenericContainerBuilder {
       registryconfig: registryConfig,
       labels,
       target: this.target,
-    });
+      version: "2",
+    } as any);
 
     const container = new GenericContainer(imageName.string);
     if (!(await client.image.exists(imageName))) {
